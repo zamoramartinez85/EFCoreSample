@@ -14,11 +14,25 @@ namespace SamuraiApp.Data
 
         public DbSet<Quote> Quotes { get; set; }
 
+        public DbSet<Battle> Battles { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=DESKTOP-GN8HL8E;Initial Catalog=SamuraiAppData;Integrated Security=True");
 
-            base.OnConfiguring(optionsBuilder); 
+            //base.OnConfiguring(optionsBuilder); 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Samurai>()
+                .HasMany(s => s.Battles)
+                .WithMany(b => b.Samurais)
+                .UsingEntity<BattleSamurai>
+                (bs => bs.HasOne<Battle>().WithMany(),
+                 bs => bs.HasOne<Samurai>().WithMany())
+                .Property(bs => bs.DateJoined)
+                .HasDefaultValueSql("getdate()");
         }
     }
 }
