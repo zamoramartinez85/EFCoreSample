@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamuraiApp.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamuraiApp.Data
 {
@@ -16,12 +11,25 @@ namespace SamuraiApp.Data
 
         public DbSet<Battle> Battles { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /// <summary>
+        /// Constructor para WebAPI
+        /// </summary>
+        /// <param name="options"></param>
+        public SamuraiContext(DbContextOptions<SamuraiContext> options)
+            :base(options)
         {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-GN8HL8E;Initial Catalog=SamuraiAppData;Integrated Security=True");
 
-            //base.OnConfiguring(optionsBuilder); 
         }
+
+        //Comentamos el siguiente método para su uso a través de API
+        //En el caso de tener que ser ejecutado en local, descomentaríamos para completar la configuración
+        //En el caso de ASP.Net WebAPI, el servicio se encarga de configurar el DbContext
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source=DESKTOP-GN8HL8E;Initial Catalog=SamuraiAppData;Integrated Security=True");
+
+        //    //base.OnConfiguring(optionsBuilder); 
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
